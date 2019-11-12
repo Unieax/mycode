@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd 
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context.xsd">
+       <context:property-placeholder location="classpath:db.properties"/>
+       <bean id="c3p0" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+       	  <property name="driverClass" value="${jdbc.driver}"></property>
+          <property name="jdbcUrl" value="${jdbc.url}"></property>
+          <property name="user" value="${jdbc.username}"></property>
+          <property name="password" value="${jdbc.password}"></property>
+       </bean>
+       <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+          <property name="dataSource" ref="c3p0"/>
+            <!--   用下面两个属性替换上面属性，SqlMapConfig.xml配置直接拿掉，其他配置不变  -->
+          <property name="typeAliasesPackage" value="com.company.entity"></property>
+          <property name="mapperLocations" value="classpath:com/company/mapper/*.xml"></property>
+       </bean>
+       <!-- 配置动态sqlSession -->
+       <!--持久层实现类的对象实例化      sqlSession    整包      实现类对象的id是mapper接口名：第一个字母小写 -->
+       <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+          <property name="basePackage" value="com.company.mapper" />
+          <!-- 此处用value,不用ref -->
+          <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+       </bean>  
+       
+</beans>
