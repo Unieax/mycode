@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.mapper.OperatorMapper">
+	<select id="selAll" resultType="Operator" >
+		select * from Operator 
+	</select>
+	<select id="sel" resultType="Operator" parameterType="Operator">
+		select * from Operator where name like CONCAT('%',#{name},'%') and state=#{state}
+	</select>
+</mapper>
